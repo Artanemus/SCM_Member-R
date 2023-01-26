@@ -15,9 +15,7 @@ const
   BLD_VER = 0; // Build nr.
 
 type
-//  {$IFDEF DELPHIXE2_LVL}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-//  {$ENDIF}
   TExeInfo = class(TComponent)
   private
     { Private declarations }

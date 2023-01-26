@@ -1,7 +1,7 @@
 object About: TAbout
   Left = 0
   Top = 0
-  BorderIcons = []
+  BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'About SwimClubMeet (SCM) Member'
   ClientHeight = 415
@@ -13,10 +13,13 @@ object About: TAbout
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsStayOnTop
+  KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
+  ShowHint = True
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 19
@@ -4390,6 +4393,7 @@ object About: TAbout
     Top = 355
     Width = 209
     Height = 41
+    Hint = 'Click to goto https://ko-fi.com/artanemus'
     ImageCollection = ImageCollection1
     ImageWidth = 0
     ImageHeight = 0
@@ -4410,6 +4414,7 @@ object About: TAbout
     Top = 360
     Width = 80
     Height = 31
+    Hint = 'Close the dialog box. (ESC)'
     Caption = 'Close'
     TabOrder = 0
     OnClick = Button1Click

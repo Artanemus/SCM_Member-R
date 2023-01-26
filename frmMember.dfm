@@ -13,6 +13,7 @@ object Member: TMember
   Menu = MainMenu1
   OldCreateOrder = False
   Position = poMainFormCenter
+  ShowHint = True
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -545,7 +546,7 @@ object Member: TMember
           Left = 1109
           Top = 53
           Width = 60
-          Height = 228
+          Height = 252
           DataSource = SCM.dsContactNum
           VisibleButtons = [nbInsert, nbDelete, nbPost, nbCancel]
           Hints.Strings = (
