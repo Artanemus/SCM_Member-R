@@ -11,13 +11,11 @@ object Member: TMember
   Font.Name = 'Tahoma'
   Font.Style = []
   Menu = MainMenu1
-  OldCreateOrder = False
   Position = poMainFormCenter
   ShowHint = True
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 19
   object Panel1: TPanel
     Left = 0
@@ -28,6 +26,7 @@ object Member: TMember
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 1346
     DesignSize = (
       1350
       49)
@@ -67,6 +66,7 @@ object Member: TMember
       TabOrder = 1
       WordWrap = True
       OnClick = chkbHideInActiveClick
+      ExplicitLeft = 221
     end
     object chkbHideArchived: TCheckBox
       Left = 20
@@ -78,6 +78,7 @@ object Member: TMember
       TabOrder = 0
       WordWrap = True
       OnClick = chkbHideArchivedClick
+      ExplicitLeft = 16
     end
     object chkbHideNonSwimmers: TCheckBox
       Left = 442
@@ -89,6 +90,7 @@ object Member: TMember
       TabOrder = 2
       WordWrap = True
       OnClick = chkbHideNonSwimmersClick
+      ExplicitLeft = 438
     end
     object btnFindMember: TButton
       Left = 890
@@ -127,6 +129,8 @@ object Member: TMember
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 757
+    ExplicitWidth = 1346
     object DBNavigator1: TDBNavigator
       Left = 385
       Top = 6
@@ -153,6 +157,8 @@ object Member: TMember
     TabHeight = 40
     TabOrder = 2
     TabWidth = 160
+    ExplicitWidth = 1346
+    ExplicitHeight = 708
     object TabSheet1: TTabSheet
       Caption = 'Member'#39's Details'
       object Panel7: TPanel
@@ -163,6 +169,8 @@ object Member: TMember
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 1338
+        ExplicitHeight = 658
         object Label3: TLabel
           Left = 105
           Top = 139

@@ -432,7 +432,7 @@ begin
   begin
     fDoDelete := false;
     dlg := TDelMember.Create(Self);
-    // get the name of the member to delete
+    // get the fullname of the member to delete
     FName := SCM.dsMember.DataSet.FieldByName('FName').AsString;
     ID := SCM.dsMember.DataSet.FieldByName('MemberID').AsInteger;
     s := IntToStr(ID);
