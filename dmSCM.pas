@@ -87,10 +87,11 @@ type
   public
     { Public declarations }
     procedure ActivateTable();
-    procedure SimpleLoadSettingString(ASection, AName: string; var AValue: string);
-    procedure SimpleMakeTemporyFDConnection(Server, User, Password: string;
-      OsAuthent: boolean);
-    procedure SimpleSaveSettingString(ASection, AName, AValue: string);
+
+//    procedure SimpleLoadSettingString(ASection, AName: string; var AValue: string);
+//    procedure SimpleMakeTemporyFDConnection(Server, User, Password: string;
+//      OsAuthent: boolean);
+//    procedure SimpleSaveSettingString(ASection, AName, AValue: string);
 
     procedure UpdateDOB(DOB: TDateTime);
     procedure UpdateSwimClub(SwimClubID: Integer);
@@ -99,7 +100,7 @@ type
 
     function LocateMember(MemberID: Integer): boolean;
 
-    property IsActive: boolean read FIsActive write FIsActive;
+    property scmIsActive: boolean read FIsActive write FIsActive;
     property RecordCount: Integer read fRecordCount;
 
   end;
@@ -117,8 +118,8 @@ implementation
 {$R *.dfm}
 
 uses
-  System.IOUtils, IniFiles, Utility, winMsgDef, Winapi.Windows, Winapi.Messages,
-  vcl.Dialogs, System.UITypes;
+  System.IOUtils, IniFiles, scmUtility, scmDefines, Winapi.Windows, Winapi.Messages,
+  vcl.Dialogs, System.UITypes, vcl.Forms;
 
 procedure TSCM.ActivateTable;
 begin
@@ -177,7 +178,7 @@ procedure TSCM.qryMemberAfterScroll(DataSet: TDataSet);
 begin
   // use this to post directly to form : TForm(Self.GetOwner).Handle;
   // requires uses : Vcl.Forms
-  PostMessage(HWND_BROADCAST, WM_SCMAFTERSCOLL, 0, 0);
+  PostMessage(TForm(Owner).Handle, SCM_AFTERSCROLL, 0, 0);
 end;
 
 procedure TSCM.qryMemberBeforeDelete(DataSet: TDataSet);
@@ -236,6 +237,7 @@ begin
   end;
 end;
 
+{
 procedure TSCM.SimpleLoadSettingString(ASection, AName: string; var AValue: string);
 var
   ini: TIniFile;
@@ -311,6 +313,7 @@ begin
   end;
 
 end;
+}
 
 procedure TSCM.UpdateDOB(DOB: TDateTime);
 begin
@@ -354,7 +357,7 @@ begin
   end;
   qryMember.EnableControls;
   // This allows the main to adjust record count, etc....
-  PostMessage(HWND_BROADCAST, WM_SCMREQUERY, 0, 0);
+  PostMessage(TForm(Owner).handle, SCM_REQUERY, 0, 0);
 
 end;
 

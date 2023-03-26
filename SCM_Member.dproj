@@ -4,8 +4,8 @@
         <ProjectVersion>19.5</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Config Condition="'$(Config)'==''">Release</Config>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
         <MainSource>SCM_Member.dpr</MainSource>
@@ -135,13 +135,13 @@
         <VerInfo_Keys>CompanyName=Artanemus;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=SCM_Member.exe;LegalCopyright=© 2019-2022;LegalTrademarks=Artanemus;OriginalFilename=SCM_Member;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0;Comments=Manage your club&apos;s members. Part of the SwimClubMeet eco system.</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Release>2</VerInfo_Release>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=Artanemus;FileDescription=$(MSBuildProjectName);FileVersion=1.0.2.0;InternalName=SCM_Member.exe;LegalCopyright=© 2019-2022;LegalTrademarks=Artanemus;OriginalFilename=SCM_Member;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0;Comments=Manage your club&apos;s members. Part of the SwimClubMeet eco system.</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Artanemus;FileDescription=$(MSBuildProjectName);FileVersion=1.0.2.1;InternalName=SCM_Member.exe;LegalCopyright=© 2019-2022;LegalTrademarks=Artanemus;OriginalFilename=SCM_Member;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0;Comments=Manage your club&apos;s members. Part of the SwimClubMeet eco system.</VerInfo_Keys>
         <Icon_MainIcon>SCM_Member.ico</Icon_MainIcon>
+        <VerInfo_Build>1</VerInfo_Build>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -151,11 +151,6 @@
             <Form>Member</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="dlgAbout.pas">
-            <Form>About</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="winMsgDef.pas"/>
         <DCCReference Include="dlgDOBPicker.pas">
             <Form>DOBPicker</Form>
             <FormType>dfm</FormType>
@@ -189,6 +184,10 @@
         <DCCReference Include="..\SCM_SHARED\SCMDefines.pas"/>
         <DCCReference Include="..\SCM_SHARED\exeinfo.pas"/>
         <DCCReference Include="..\SCM_SHARED\SCMSimpleConnect.pas"/>
+        <DCCReference Include="..\SCM_SHARED\dlgAbout.pas">
+            <Form>About</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -210,16 +209,22 @@
                     <Source Name="MainSource">SCM_Member.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k270.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp270.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k270.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp270.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k280.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp280.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="4">
                 <DeployFile LocalName="DEPLOY\INNO\SCM_Member_150x150.png" Configuration="Debug" Class="UWP_DelphiLogo150"/>
                 <DeployFile LocalName="DEPLOY\INNO\SCM_Member_44x44.png" Configuration="Debug" Class="UWP_DelphiLogo44"/>
                 <DeployFile LocalName="Win32\Debug\SCM_Member.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="Win32\Debug\SCM_Member.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>SCM_Member.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Win64\Release\SCM_Member.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>SCM_Member.exe</RemoteName>

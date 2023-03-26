@@ -5,8 +5,6 @@ uses
   frmMember in 'frmMember.pas' {Member},
   Vcl.Themes,
   Vcl.Styles,
-  dlgAbout in 'dlgAbout.pas' {About},
-  winMsgDef in 'winMsgDef.pas',
   dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker},
   dlgFindMember in 'dlgFindMember.pas' {FindMember},
   dlgGotoMember in 'dlgGotoMember.pas' {GotoMember},
@@ -17,7 +15,8 @@ uses
   SCMUtility in '..\SCM_SHARED\SCMUtility.pas',
   SCMDefines in '..\SCM_SHARED\SCMDefines.pas',
   exeinfo in '..\SCM_SHARED\exeinfo.pas',
-  SCMSimpleConnect in '..\SCM_SHARED\SCMSimpleConnect.pas';
+  SCMSimpleConnect in '..\SCM_SHARED\SCMSimpleConnect.pas',
+  dlgAbout in '..\SCM_SHARED\dlgAbout.pas' {About};
 
 {$R *.res}
 
