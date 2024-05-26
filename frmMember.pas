@@ -3,130 +3,59 @@ unit frmMember;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, VclTee.TeeGDIPlus,
-  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
-  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
-  FireDAC.Stan.Async, FireDAC.DApt, System.ImageList, Vcl.ImgList,
-  FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.StdCtrls, VclTee.TeEngine,
-  VclTee.TeeSpline, VclTee.Series, VclTee.TeeProcs, VclTee.Chart,
-  VclTee.DBChart, Vcl.ComCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, Vcl.Mask,
-  Vcl.ExtCtrls, Vcl.Menus, dmSCM, Vcl.WinXCalendars, SCMDefines;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.DBCtrls,
+  SCMSimpleConnect, SCMUtility, dmSCM,
+  FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Pool,
+  FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait, Data.DB, System.Actions,
+  Vcl.ActnList, Vcl.WinXCtrls, Vcl.ExtCtrls, ProgramSetting, Vcl.ComCtrls,
+  exeinfo;
 
 type
   TMember = class(TForm)
-    Panel1: TPanel;
-    lblMemberCount: TLabel;
-    chkbHideInActive: TCheckBox;
-    chkbHideArchived: TCheckBox;
-    chkbHideNonSwimmers: TCheckBox;
-    Panel3: TPanel;
-    DBNavigator1: TDBNavigator;
-    PageControl1: TPageControl;
-    TabSheet1: TTabSheet;
-    Panel7: TPanel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label2: TLabel;
     Label1: TLabel;
-    Label10: TLabel;
-    DBText3: TDBText;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label12: TLabel;
-    DBText5: TDBText;
-    Label21: TLabel;
-    Label22: TLabel;
-    Label24: TLabel;
-    DBlucboGender: TDBLookupComboBox;
-    DBedtFirstName: TDBEdit;
-    DBedtLastName: TDBEdit;
-    DBlucboMembershipType: TDBLookupComboBox;
-    DBedtMembershipNum: TDBEdit;
-    DBchkIsActive: TDBCheckBox;
-    DBEdtEmail: TDBEdit;
-    DBgridContactInfo: TDBGrid;
-    DBlucboHouse: TDBLookupComboBox;
-    DBchkIsSwimmer: TDBCheckBox;
-    DBchkIsArchived: TDBCheckBox;
-    btnClearHouse: TButton;
-    btnClearMembershipType: TButton;
-    btnClearGender: TButton;
-    TabSheet5: TTabSheet;
-    DBGrid3: TDBGrid;
-    ImageList1: TImageList;
-    MainMenu1: TMainMenu;
-    File2: TMenuItem;
-    Exit2: TMenuItem;
-    Help2: TMenuItem;
-    About2: TMenuItem;
-    btnFindMember: TButton;
-    btnGotoMemberID: TButton;
-    Find1: TMenuItem;
-    Find2: TMenuItem;
-    Label13: TLabel;
-    Label18: TLabel;
-    RegistrationNum: TDBEdit;
-    Label8: TLabel;
-    dtpickDOB: TCalendarPicker;
-    lblCount: TLabel;
-    btnGotoMembership: TButton;
-    DBNavigator2: TDBNavigator;
-    Onlinehelp1: TMenuItem;
-    SCMwebsite1: TMenuItem;
+    Label2: TLabel;
+    Label3: TLabel;
+    chkbUseOsAuthentication: TCheckBox;
+    edtPassword: TEdit;
+    edtServerName: TEdit;
+    edtUser: TEdit;
+    DBComboBox1: TDBComboBox;
+    Label4: TLabel;
+    btnConnect: TButton;
+    btnDisconnect: TButton;
+    btnManageMembers: TButton;
+    ActionList1: TActionList;
+    actnConnect: TAction;
+    actnDisconnect: TAction;
+    actnManageMembers: TAction;
+    ActivityIndicator1: TActivityIndicator;
+    lblAniIndicatorStatus: TLabel;
+    Timer1: TTimer;
+    StatusBar1: TStatusBar;
+    procedure actnConnectExecute(Sender: TObject);
+    procedure actnConnectUpdate(Sender: TObject);
+    procedure actnDisconnectExecute(Sender: TObject);
+    procedure actnDisconnectUpdate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure About2Click(Sender: TObject);
-    procedure DBGrid3CellClick(Column: TColumn);
-    procedure DBGrid3ColEnter(Sender: TObject);
-    procedure DBGrid3ColExit(Sender: TObject);
-    procedure DBGrid3DrawColumnCell(Sender: TObject; const Rect: TRect;
-      DataCol: Integer; Column: TColumn; State: TGridDrawState);
-    procedure DBGrid3KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure DrawCheckBoxes(oGrid: TObject; Rect: TRect; Column: TColumn);
-    procedure dtpickDOBChange(Sender: TObject);
-    procedure chkbHideArchivedClick(Sender: TObject);
-    procedure chkbHideInActiveClick(Sender: TObject);
-    procedure chkbHideNonSwimmersClick(Sender: TObject);
-    procedure DBGrid3EditButtonClick(Sender: TObject);
-    procedure btnClearClick(Sender: TObject);
-    procedure btnFindMemberClick(Sender: TObject);
-    procedure btnGotoMemberIDClick(Sender: TObject);
-    procedure btnGotoMembershipClick(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
-    procedure Find2Click(Sender: TObject);
-    procedure Onlinehelp1Click(Sender: TObject);
-    procedure SCMwebsite1Click(Sender: TObject);
-    procedure Exit2Click(Sender: TObject);
-    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure DBNavigator1BeforeAction(Sender: TObject; Button: TNavigateBtn);
-    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
-
   private
     { Private declarations }
-    fSwimClubID: Integer;
-    fDoDelete: Boolean;
-    procedure ReadPreferences();
-    procedure WritePreferences();
-    function FindMember(MemberID: Integer): Boolean;
-    function AssertConnection: boolean;
+    fDBName: String;
+    fDBConnection: TFDConnection;
+    fLoginTimeOut: integer;
+    fConnectionCountdown: integer;
+    procedure ConnectOnTerminate(Sender: TObject); //THREAD.
+    procedure Status_ConnectionDescription;
+    procedure LoadFromSettings; // JSON Program Settings
+    procedure LoadSettings; // JSON Program Settings
+    procedure SaveToSettings; // JSON Program Settings
+    function GetSCMVerInfo(): string;
 
-  protected
-    // ----------------------------------------------------
-    // W I N D O W S   M E S S A G E S  .
-    // ----------------------------------------------------
-    procedure MsgAfterScroll(var Msg: TMessage); message SCM_AFTERSCROLL;
-    procedure MsgRequery(var Msg: TMessage); message SCM_REQUERY;
 
   public
     { Public declarations }
-    procedure ClearAllFilters();
   end;
-
-const
-  INIFILE_SCM_MEMBERPREF = 'SCM_MemberPref.ini';
-  INIFILE_SECTION = 'SCM_Member';
 
 var
   Member: TMember;
@@ -135,640 +64,270 @@ implementation
 
 {$R *.dfm}
 
-uses scmUtility, dlgBasicLogin, System.IniFiles, System.UITypes, dlgAbout,
-  dlgDOBPicker, dlgFindMember, dlgGotoMember, dlgGotoMembership,
-  System.IOUtils, Winapi.ShellAPI, dlgDelMember;
-
-function TMember.AssertConnection: boolean;
-begin
-  result := false;
-  // test datamodule construction
-  if Assigned(SCM) then
-  begin
-    // IsActive if TFDConnection::scmConnection && FireDAC tables are active
-    if SCM.scmIsActive then
-      result := true;
-  end;
-end;
-
-procedure TMember.About2Click(Sender: TObject);
+procedure TMember.actnConnectExecute(Sender: TObject);
 var
-  dlg: TAbout;
+  sc: TSimpleConnect;
+  myThread: TThread;
 begin
-  dlg := TAbout.Create(Self);
-  dlg.DBName := 'SwimClubMeet'; // DEFAULT
-  // Note: Safe to call TAbout without connection params assigned.
-  // ... it simply won't show the database version.
-  if AssertConnection then
-    dlg.DBConnection := SCM.scmConnection;
-  dlg.ShowModal;
-  FreeAndNil(dlg);
-end;
+  // Hide the Login and abort buttons while attempting connection
+//  lblLoginErrMsg.Visible := false;
+//  btnAbort.Visible := false;
+  btnConnect.Visible := false;
+//  lblMsg.Visible := true;
+//  lblMsg.Update();
+  Application.ProcessMessages();
 
-procedure TMember.btnClearClick(Sender: TObject);
-begin
-  if Assigned(SCM) and (SCM.qryMember.Active) then
+  if Assigned(fDBConnection) then
   begin
-    if (SCM.qryMember.State <> dsInsert) or (SCM.qryMember.State <> dsEdit) then
-      SCM.qryMember.Edit();
-    case TButton(Sender).Tag of
-      1:
-        SCM.qryMember.FieldByName('GenderID').Clear();
-      2:
-        SCM.qryMember.FieldByName('MembershipTypeID').Clear();
-      3:
-        SCM.qryMember.FieldByName('HouseID').Clear();
-    end;
-  end;
-end;
+    sc := TSimpleConnect.CreateWithConnection(Self, fDBConnection);
+    // DEFAULT : SwimClubMeet
+    sc.DBName := fDBName;
+    sc.SimpleMakeTemporyConnection(edtServerName.Text, edtUser.Text,
+      edtPassword.Text, chkbUseOsAuthentication.Checked);
+//    lblMsg.Visible := false;
 
-procedure TMember.btnFindMemberClick(Sender: TObject);
-var
-  dlg: TFindMember;
-  rtn: TModalResult;
-begin
-  dlg := TFindMember.Create(Self);
-  rtn := dlg.ShowModal();
-  if IsPositiveResult(rtn) then
-  begin
-    // LOCATE MEMBER IN qryMember
-    FindMember(dlg.MemberID)
-  end;
-  dlg.Free;
-end;
-
-procedure TMember.btnGotoMemberIDClick(Sender: TObject);
-var
-  dlg: TGotoMember;
-  rtn: TModalResult;
-begin
-  if Assigned(SCM) then
-  begin
-    dlg := TGotoMember.Create(Self);
-    dlg.SwimClubID := SCM.dsMember.DataSet.FieldByName('SwimClubID').AsInteger;
-    rtn := dlg.ShowModal;
-    if IsPositiveResult(rtn) then
+    if (fDBConnection.Connected) then
     begin
-      // LOCATE MEMBER IN qryMember
-      FindMember(dlg.MemberID)
-    end;
-    dlg.Free;
-  end;
-end;
-
-procedure TMember.btnGotoMembershipClick(Sender: TObject);
-var
-  dlg: TGotoMembership;
-  rtn: TModalResult;
-begin
-  if Assigned(SCM) then
-  begin
-    dlg := TGotoMembership.Create(Self);
-    dlg.SwimClubID := SCM.dsMember.DataSet.FieldByName('SwimClubID').AsInteger;
-    rtn := dlg.ShowModal;
-    if IsPositiveResult(rtn) then
-    begin
-      // NOTE: returns both MembershipNum and MemberID
-      // LOCATE MEMBER IN qryMember
-      FindMember(dlg.MemberID)
-    end;
-    dlg.Free;
-  end;
-end;
-
-procedure TMember.chkbHideArchivedClick(Sender: TObject);
-begin
-  if Assigned(SCM) then
-    SCM.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
-end;
-
-procedure TMember.chkbHideInActiveClick(Sender: TObject);
-begin
-  if Assigned(SCM) then
-    SCM.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
-end;
-
-procedure TMember.chkbHideNonSwimmersClick(Sender: TObject);
-begin
-  if Assigned(SCM) then
-    SCM.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
-end;
-
-procedure TMember.ClearAllFilters;
-begin
-  if Assigned(SCM) then
-  begin
-    chkbHideArchived.Checked := false;
-    chkbHideInActive.Checked := false;
-    chkbHideNonSwimmers.Checked := false;
-    SCM.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
-  end;
-end;
-
-procedure TMember.DBGrid3CellClick(Column: TColumn);
-begin
-  if Assigned(Column.Field) and (Column.Field.DataType = ftBoolean) then
-  begin
-    if (Column.Grid.DataSource.DataSet.State <> dsEdit) or
-      (Column.Grid.DataSource.DataSet.State <> dsInsert) then
-      Column.Grid.DataSource.DataSet.Edit;
-    Column.Field.Value := not Column.Field.AsBoolean;
-  end;
-  if Assigned(Column.Field) and (Column.Field.FieldKind = fkLookup) then
-  begin
-    if (Column.Grid.DataSource.DataSet.State <> dsEdit) or
-      (Column.Grid.DataSource.DataSet.State <> dsInsert) then
-      Column.Grid.DataSource.DataSet.Edit;
-  end;
-end;
-
-procedure TMember.DBGrid3ColEnter(Sender: TObject);
-begin
-  // Important to cast TBGridOptions - else assignment desn't work!
-  // If the field is boolean, switch off Grid editing, else allow editing
-  if Assigned(DBGrid3.SelectedField) and
-    (DBGrid3.SelectedField.DataType = ftBoolean) then
-  begin
-    // Use TBGridOptions constructor
-    // Copy current options but remove editing option
-    DBGrid3.Options := DBGrid3.Options - [dgEditing];
-  end;
-end;
-
-procedure TMember.DBGrid3ColExit(Sender: TObject);
-begin
-  if Assigned(DBGrid3.SelectedField) and
-    (DBGrid3.SelectedField.DataType = ftBoolean) then
-    // Use TBGridOptions constructor
-    // Copy current options but add editing option
-    DBGrid3.Options := DBGrid3.Options + [dgEditing];
-
-end;
-
-procedure TMember.DBGrid3DrawColumnCell(Sender: TObject; const Rect: TRect;
-  DataCol: Integer; Column: TColumn; State: TGridDrawState);
-begin
-  // CHECKBOX DRAWING
-  if Assigned(Column.Field) and (Column.Field.DataType = ftBoolean) then
-  begin
-    DrawCheckBoxes(DBGrid3, Rect, Column);
-    if gdFocused in State then
-      DBGrid3.Canvas.DrawFocusRect(Rect);
-  end
-  else
-  begin
-    DBGrid3.DefaultDrawColumnCell(Rect, DataCol, Column, State);
-    if gdFocused in State then
-      DBGrid3.Canvas.DrawFocusRect(Rect);
-  end;
-end;
-
-procedure TMember.DBGrid3EditButtonClick(Sender: TObject);
-var
-  fld: TField;
-  cal: TDOBPicker;
-  // point: TPoint;
-  Rect: TRect;
-  rtn: TModalResult;
-begin
-  // handle the ellipse button for the DOB - show DatePicker
-  fld := DBGrid3.SelectedField;
-  if fld.Name = 'qryMemberDOB' then
-  begin
-    cal := TDOBPicker.Create(Self);
-    Rect := TButton(Sender).ClientToScreen(TButton(Sender).ClientRect);
-    cal.Left := Rect.Left;
-    cal.Top := Rect.Top;
-    cal.CalendarView1.Date := fld.AsDateTime;
-    rtn := cal.ShowModal;
-    if IsPositiveResult(rtn) then
-    begin
-      if (DBGrid3.DataSource.State <> dsEdit) or
-        (DBGrid3.DataSource.State <> dsInsert) then
-      begin
-        // ALT: SCM.UpdateDOB(cal.CalendarView1.Date);
-        DBGrid3.DataSource.Edit;
-        fld.Value := cal.CalendarView1.Date;
-      end;
-
-    end;
-    cal.Free;
-  end;
-end;
-
-procedure TMember.DBGrid3KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-var
-  fld: TField;
-  // dbg: TDBGrid;
-begin
-  // dbg := TDBGrid(Sender);
-
-  // Sender is TDBGrid
-  if Assigned(DBGrid3.SelectedField) then
-  begin
-
-    if (DBGrid3.SelectedField.DataType = ftBoolean) then
-    begin
-      // If the selected field is a boolean,
-      // then enable SPACE key to toggle the value.
-      fld := DBGrid3.SelectedField;
-      if (Key = vkSpace) then
-      begin
-        if (DBGrid3.DataSource.DataSet.State <> dsEdit) or
-          (DBGrid3.DataSource.DataSet.State <> dsInsert) then
-        begin
-          DBGrid3.DataSource.DataSet.Edit();
-        end;
-        fld.Value := not fld.AsBoolean;
-        Key := NULL;
-      end;
-      // Y, y, T, t
-      if (Key = $59) or (Key = $79) or (Key = $54) or (Key = $74) then
-      begin
-        if (DBGrid3.DataSource.DataSet.State <> dsEdit) or
-          (DBGrid3.DataSource.DataSet.State <> dsInsert) then
-        begin
-          DBGrid3.DataSource.DataSet.Edit();
-        end;
-        fld.Value := 1;
-        Key := NULL;
-      end;
-      // N, n, F, f
-      if (Key = $4E) or (Key = $6E) or (Key = $46) or (Key = $66) then
-      begin
-        if (DBGrid3.DataSource.DataSet.State <> dsEdit) or
-          (DBGrid3.DataSource.DataSet.State <> dsInsert) then
-        begin
-          DBGrid3.DataSource.DataSet.Edit();
-        end;
-        fld.Value := 0;
-        Key := NULL;
-      end;
-    end;
-
-    // DROPDOWN COMBOBOX
-    if (DBGrid3.SelectedField.FieldKind = fkLookup) then
-    begin
-      // NullValueKey - Alt+BkSp - CLEAR
-      if (Key = vkBack) and (ssAlt in Shift) then
-      begin
-        fld := DBGrid3.SelectedField;
-        if (fld.FieldName = 'luHouse') then
-        begin
-          DBGrid3.DataSource.DataSet.Edit();
-          DBGrid3.DataSource.DataSet.FieldByName('HouseID').Clear();
-          DBGrid3.DataSource.DataSet.Post();
-          Key := NULL;
-        end;
-        if (fld.FieldName = 'luMembershipType') then
-        begin
-          DBGrid3.DataSource.DataSet.Edit();
-          DBGrid3.DataSource.DataSet.FieldByName('MembershipTypeID').Clear();
-          DBGrid3.DataSource.DataSet.Post();
-          Key := NULL;
-        end;
-        if (fld.FieldName = 'luGender') then
-        begin
-          DBGrid3.DataSource.DataSet.Edit();
-          DBGrid3.DataSource.DataSet.FieldByName('GenderID').Clear();
-          DBGrid3.DataSource.DataSet.Post();
-          Key := NULL;
-        end;
-      end;
-    end;
-  end;
-
-end;
-
-procedure TMember.DBNavigator1BeforeAction(Sender: TObject;
-  Button: TNavigateBtn);
-var
-  dlg: TDelMember;
-  FName, s: string;
-  ID: Integer;
-begin
-  if Button = nbDelete then
-  begin
-    fDoDelete := false;
-    dlg := TDelMember.Create(Self);
-    // get the fullname of the member to delete
-    FName := SCM.dsMember.DataSet.FieldByName('FName').AsString;
-    ID := SCM.dsMember.DataSet.FieldByName('MemberID').AsInteger;
-    s := IntToStr(ID);
-    dlg.lblTitle.Caption := 'Delete (ID: ' + s + ') ' + FName +
-      ' from the SwimClubMeet database ?';
-    // display the confirm delete dlg
-    if IsPositiveResult(dlg.ShowModal) then
-    begin
-      fDoDelete := true;
-      // the delete action is allowed to continue ...
+      // setting modal result will Close() the form;
+      ModalResult := mrOk;
     end
     else
-      // raises a silent exception - cancelling the action.
-      Abort;
-    dlg.Free;
-  end;
-end;
-
-procedure TMember.DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
-begin
-  if Button = nbDelete then
-  begin
-    // click occurs after action...
-    fDoDelete := false;
-  end;
-end;
-
-// ---------------------------------------------------------------------------
-// Draw a very basic checkbox (ticked) - not a nice as TCheckListBox
-// ---------------------------------------------------------------------------
-procedure TMember.DrawCheckBoxes(oGrid: TObject; Rect: TRect; Column: TColumn);
-var
-  MyRect: TRect;
-  oField: TField;
-  iPos, iFactor: Integer;
-  bValue: Boolean;
-  g: TDBGrid;
-  points: array [0 .. 4] of TPoint;
-
-begin
-  g := TDBGrid(oGrid);
-  oField := Column.Field;
-  // is the cell checked?
-  if (oField.Value = -1) then
-    bValue := true
-  else
-    bValue := false;
-  // clear the cell with the current OS brush color?
-  g.Canvas.FillRect(Rect);
-  // calculate margins
-  MyRect.Top := Round(((Rect.Bottom - Rect.Top - 11) / 2.0)) + Rect.Top;
-  MyRect.Left := Round(((Rect.Right - Rect.Left - 11) / 2.0)) + Rect.Left;
-  MyRect.Bottom := MyRect.Top + 10;
-  MyRect.Right := MyRect.Left + 10;
-  // depends on theme - clBlack?;
-  g.Canvas.Pen.Color := clHighlightText;
-  // draw the box (with cell margins)
-  points[0].x := MyRect.Left;
-  points[0].y := MyRect.Top;
-  points[1].x := MyRect.Right;
-  points[1].y := MyRect.Top;
-  points[2].x := MyRect.Right;
-  points[2].y := MyRect.Bottom;
-  points[3].x := MyRect.Left;
-  points[3].y := MyRect.Bottom;
-  points[4].x := MyRect.Left;
-  points[4].y := MyRect.Top;
-
-  g.Canvas.Polyline(points);
-
-  iPos := MyRect.Left;
-  iFactor := 1;
-  // DRAW A TICK - Cross would be nicer?
-  if (bValue) then
-  begin
-    // depends on theme - clWhite?
-    g.Canvas.Pen.Color := clHighlightText;
-    g.Canvas.MoveTo(iPos + (iFactor * 2), MyRect.Top + 4);
-    g.Canvas.LineTo(iPos + (iFactor * 2), MyRect.Top + 7);
-    g.Canvas.MoveTo(iPos + (iFactor * 3), MyRect.Top + 5);
-    g.Canvas.LineTo(iPos + (iFactor * 3), MyRect.Top + 8);
-    g.Canvas.MoveTo(iPos + (iFactor * 4), MyRect.Top + 6);
-    g.Canvas.LineTo(iPos + (iFactor * 4), MyRect.Top + 9);
-    g.Canvas.MoveTo(iPos + (iFactor * 5), MyRect.Top + 5);
-    g.Canvas.LineTo(iPos + (iFactor * 5), MyRect.Top + 8);
-    g.Canvas.MoveTo(iPos + (iFactor * 6), MyRect.Top + 4);
-    g.Canvas.LineTo(iPos + (iFactor * 6), MyRect.Top + 7);
-    g.Canvas.MoveTo(iPos + (iFactor * 7), MyRect.Top + 3);
-    g.Canvas.LineTo(iPos + (iFactor * 7), MyRect.Top + 6);
-    g.Canvas.MoveTo(iPos + (iFactor * 8), MyRect.Top + 2);
-    g.Canvas.LineTo(iPos + (iFactor * 8), MyRect.Top + 5);
-  end;
-end;
-
-procedure TMember.dtpickDOBChange(Sender: TObject);
-begin
-  if Assigned(SCM) and (SCM.qryMember.Active) then
-  begin
-    if (SCM.qryMember.State <> dsEdit) then
-      SCM.qryMember.Edit();
-    SCM.qryMember.FieldByName('DOB').AsDateTime := dtpickDOB.Date;
-    // let user perform manual post
-    // SCM.qryMember.Post();
-  end;
-end;
-
-procedure TMember.Exit2Click(Sender: TObject);
-begin
-  Close();
-end;
-
-procedure TMember.Find2Click(Sender: TObject);
-begin
-  btnFindMemberClick(Self);
-end;
-
-function TMember.FindMember(MemberID: Integer): Boolean;
-var
-  b: Boolean;
-  s: string;
-  rtn: TModalResult;
-begin
-  result := false;
-  b := SCM.LocateMember(MemberID);
-  if b then
-    result := true
-  else
-  begin
-    s := 'Filters must to be cleared to display this member.' + sLineBreak +
-      'Clear the filters?';
-    rtn := MessageDlg(s, TMsgDlgType.mtConfirmation, mbYesNo, 0);
-    if IsPositiveResult(rtn) then
     begin
-      ClearAllFilters;
-      b := SCM.LocateMember(MemberID);
-      if b then
-        result := true;
+      // show error message - let user try again or abort
+//      lblLoginErrMsg.Visible := true;
+//      btnAbort.Visible := true;
+      btnConnect.Visible := true;
+    end;
+    sc.Free;
+  end;
+
+
+  if (Assigned(SCM) and (SCM.scmConnection.Connected = false)) then
+  begin
+    lblAniIndicatorStatus.Caption := 'Connecting';
+    fConnectionCountdown := fLoginTimeOut;
+    ActivityIndicator1.Visible := true; // progress timer
+    ActivityIndicator1.Enabled := true; // start spinning
+    lblAniIndicatorStatus.Visible := true; // a label with countdown
+    Timer1.Enabled := true; // start the countdown
+    actnConnect.Visible := false;
+    application.ProcessMessages;
+
+    myThread := TThread.CreateAnonymousThread(
+      procedure
+      begin
+        // can only be assigned if not connected
+        SCM.scmConnection.Params.Values['LoginTimeOut'] :=
+          IntToStr(fLoginTimeOut);
+
+        sc := TSimpleConnect.CreateWithConnection(Self, SCM.scmConnection);
+        sc.DBName := 'SwimClubMeet'; // DEFAULT
+        sc.SaveConfigAfterConnection := false; // using JSON not System.IniFiles
+        sc.SimpleMakeTemporyConnection(edtServerName.Text, edtUser.Text,
+          edtPassword.Text, chkbUseOsAuthentication.Checked);
+        Timer1.Enabled := false;
+        sc.Free
+      end);
+
+    myThread.OnTerminate := ConnectOnTerminate;
+    myThread.Start;
+  end;
+
+end;
+
+procedure TMember.actnConnectUpdate(Sender: TObject);
+begin
+  // verbose code - stop unecessary repaints ...
+  if Assigned(SCM) then
+  begin
+    if SCM.scmConnection.Connected and actnConnect.Visible then
+      actnConnect.Visible := false;
+    if not SCM.scmConnection.Connected and not actnConnect.Visible then
+      actnConnect.Visible := true;
+  end
+  else // D E F A U L T  I N I T  . Data module not created.
+  begin
+    if not actnConnect.Visible then
+      actnConnect.Visible := true;
+  end;
+end;
+
+procedure TMember.actnDisconnectExecute(Sender: TObject);
+begin
+  if Assigned(SCM) then
+  begin
+    SCM.DeActivateTable;
+    SCM.scmConnection.Connected := false;
+    StatusBar1.SimpleText := 'No connection.';
+  end;
+  ActivityIndicator1.Visible := false;
+  lblAniIndicatorStatus.Visible := false;
+  ActivityIndicator1.Enabled := false;
+  SaveToSettings; // As this was a OK connection - store parameters.
+  UpdateAction(actnDisconnect);
+  UpdateAction(actnConnect);
+end;
+
+procedure TMember.actnDisconnectUpdate(Sender: TObject);
+begin
+  // verbose code - stop unecessary repaints ...
+  if Assigned(SCM) then
+  begin
+    if SCM.scmConnection.Connected and not actnDisconnect.Visible then
+      actnDisconnect.Visible := true;
+    if not SCM.scmConnection.Connected and actnDisconnect.Visible then
+      actnDisconnect.Visible := false;
+  end
+  else // D E F A U L T  I N I T  . Data module not created.
+  begin
+    if actnDisconnect.Visible then
+      actnDisconnect.Visible := false;
+  end;
+end;
+
+procedure TMember.ConnectOnTerminate(Sender: TObject);
+begin
+  lblAniIndicatorStatus.Visible := false;
+  ActivityIndicator1.Enabled := false;
+  ActivityIndicator1.Visible := false;
+
+  if TThread(Sender).FatalException <> nil then
+  begin
+    // something went wrong
+    // Exit;
+  end;
+
+  if not Assigned(SCM) then
+    exit;
+
+  // C O N N E C T E D  .
+  if (SCM.scmConnection.Connected) then
+  begin
+    SCM.ActivateTable;
+
+    // ALL TABLES SUCCESSFULLY MADE ACTIVE ...
+    if (SCM.IsActive = true) then
+    begin
+
     end;
   end;
-end;
 
-procedure TMember.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-begin
-  // Test database state
-  if Assigned(SCM) and (SCM.qryMember.Active) then
+  if not SCM.scmConnection.Connected then
   begin
-    if (SCM.qryMember.State = dsEdit) or (SCM.qryMember.State = dsInsert) then
-      SCM.qryMember.Post();
+    // Attempt to connect failed.
+    StatusBar1.SimpleText :=
+      'A connection couldn''t be made. (Check you input values.)';
   end;
+
+  // Disconnect button vivibility
+  UpdateAction(actnDisconnect);
+  // Connect button vivibility
+  UpdateAction(actnConnect);
+  // Status : SwimClub name + APP and DB version.
+  Status_ConnectionDescription;
+
 end;
 
 procedure TMember.FormCreate(Sender: TObject);
 var
-  aBasicLogin: TBasicLogin;
-  result: TModalResult;
+  AValue, ASection, AName: string;
+
 begin
-  // ----------------------------------------------------
-  // C R E A T E   D A T A M O D U L E   S C M .
-  // ----------------------------------------------------
-  try
+  // Initialization of params.
+  application.ShowHint := true;
+  ActivityIndicator1.Visible := false;
+  ActivityIndicator1.Enabled := false;
+  btnDisconnect.Visible := false;
+  fLoginTimeOut := CONNECTIONTIMEOUT; // DEFAULT 20 - defined in ProgramSetting
+  fConnectionCountdown := CONNECTIONTIMEOUT;
+  Timer1.Enabled := false;
+  lblAniIndicatorStatus.Visible := false;
+
+  // A Class that uses JSON to read and write application configuration
+  if Settings = nil then
+    Settings := TPrgSetting.Create;
+
+      // C R E A T E   T H E   D A T A M O D U L E .
+  if NOT Assigned(SCM) then
     SCM := TSCM.Create(Self);
-  finally
-    // with SCM created and the essential tables are open then
-    // asserting the connection should be true
-    if not Assigned(SCM) then
-    begin
-      MessageDlg('The SCM connection couldn''t be created!', mtError,
-        [mbOk], 0);
-      Application.Terminate;
-    end;
-  end;
-  if not Assigned(SCM) then
-    Exit;
-  // ----------------------------------------------------
-  // C O N N E C T   T O   S E R V E R .
-  // ----------------------------------------------------
-  aBasicLogin := TBasicLogin.Create(Self);
-  aBasicLogin.DBName := 'SwimClubMeet'; // DEFAULT
-  aBasicLogin.DBConnection := SCM.SCMConnection;
-  result := aBasicLogin.ShowModal;
-  aBasicLogin.Free;
+  if SCM.scmConnection.Connected then
+    SCM.scmConnection.Connected := false;
 
-  if (result = mrAbort) or (result = mrCancel) then
-  begin
-    Application.Terminate;
-    Exit;
-  end;
-
-  // ----------------------------------------------------
-  // A C T I V A T E   S C M  .
-  // ----------------------------------------------------
-  SCM.ActivateTable;
-  // A S S E R T .
-  if not SCM.scmIsActive then
-  begin
-    MessageDlg('An error occurred during MSSQL table activation.' + sLineBreak +
-      'The database''s schema may need updating.' + sLineBreak +
-      'The application will terminate!', mtError, [mbOk], 0);
-    Application.Terminate;
-  end;
-  // ----------------------------------------------------
-  // I N I T I A L I Z E   P A R A M S .
-  // ----------------------------------------------------
-  Application.ShowHint := true; // enable hints
-  fSwimClubID := 1;
-  chkbHideArchived.Checked := true;
-  chkbHideInActive.Checked := false;
-  chkbHideNonSwimmers.Checked := false;
-
-  // ----------------------------------------------------
-  // R E A D   P R E F E R E N C E S .
-  // ----------------------------------------------------
-  ReadPreferences;
-
-  // ----------------------------------------------------
-  // D I S P L A Y   F O R M   C A P T I O N   I N F O .
-  // ----------------------------------------------------
-  Self.Caption := 'SwimClubMeet (SCM) MEMBER : ';
-  SCM.UpdateSwimClub(fSwimClubID);
-  if SCM.qrySwimClub.Active then
-  begin
-    Self.Caption := Self.Caption + SCM.qrySwimClub.FieldByName
-      ('DetailStr').AsString;
-  end;
-
-  // ----------------------------------------------------
-  // Prepares all core queries  (Master+Child)
-  // ----------------------------------------------------
-  SCM.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-    chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
-
-  // Display tabsheet
-  PageControl1.TabIndex := 0;
+  // READ APPLICATION   C O N F I G U R A T I O N   PARAMS.
+  // JSON connection settings. Windows location :
+  // %SYSTEMDRIVE\%%USER%\%USERNAME%\AppData\Roaming\Artanemus\SwimClubMeet\Member
+  LoadSettings;
 
 end;
 
-procedure TMember.FormDestroy(Sender: TObject);
+function TMember.GetSCMVerInfo: string;
+var
+  myExeInfo: TExeInfo;
 begin
-  WritePreferences;
-end;
-
-procedure TMember.MsgAfterScroll(var Msg: TMessage);
-begin
+  result := '';
+  // if connected - display the application version
+  // and the SwimClubMeet database version.
   if Assigned(SCM) then
+    if SCM.scmConnection.Connected then
+      result := 'DB v' + SCM.GetDBVerInfo;
+  // get the application version number
+  myExeInfo := TExeInfo.Create(Self);
+  result := 'App v' + myExeInfo.FileVersion + ' - ' + result;
+  myExeInfo.Free;
+end;
+
+procedure TMember.LoadFromSettings;
+begin
+  edtServerName.Text := Settings.Server;
+  edtUser.Text := Settings.User;
+  edtPassword.Text := Settings.Password;
+  chkbUseOsAuthentication.Checked := Settings.OSAuthent;
+  fLoginTimeOut := Settings.LoginTimeOut;
+end;
+
+procedure TMember.LoadSettings;
+begin
+  if Settings = nil then
+    Settings := TPrgSetting.Create;
+  if not FileExists(Settings.GetDefaultSettingsFilename()) then
   begin
-    // DATE-OF-BIRTH - DATETIME PICKER INIT
-    dtpickDOB.Date := SCM.qryMember.FieldByName('DOB').AsDateTime;
+    ForceDirectories(Settings.GetSettingsFolder());
+    Settings.SaveToFile();
   end;
+  Settings.LoadFromFile();
+  LoadFromSettings();
 end;
 
-procedure TMember.MsgRequery(var Msg: TMessage);
+procedure TMember.SaveToSettings;
 begin
-  if Assigned(SCM) then
+  Settings.Server := edtServerName.Text;
+  Settings.User := edtUser.Text;
+  Settings.Password := edtPassword.Text;
+  if chkbUseOsAuthentication.Checked then
+    Settings.OSAuthent := true
+  else
+    Settings.OSAuthent := false;
+  Settings.LoginTimeOut := fLoginTimeOut;
+  Settings.SaveToFile();
+end;
+
+procedure TMember.Status_ConnectionDescription;
+var
+s: string;
+begin
+  if Assigned(SCM) and SCM.IsActive then
   begin
-    // UPDATE THE NUMBER OF RECORDS.
-    lblCount.Caption := IntToStr(SCM.RecordCount);
-  end;
-end;
+    // STATUS BAR CAPTION.
+    StatusBar1.SimpleText := 'Connected to SwimClubMeet. ';
+    StatusBar1.SimpleText := StatusBar1.SimpleText + GetSCMVerInfo;
 
-procedure TMember.Onlinehelp1Click(Sender: TObject);
-var
-  base_URL: string;
-begin
-  base_URL := 'http://artanemus.github.io/manual/index.htm';
-  ShellExecute(0, NIL, PChar(base_URL), NIL, NIL, SW_SHOWNORMAL);
-
-end;
-
-procedure TMember.ReadPreferences;
-var
-  ini: TIniFile;
-begin
-  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\SCM\ + SCMMEMBERPREF
-  ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_MEMBERPREF);
-  try
-    chkbHideArchived.Checked := ini.ReadBool(INIFILE_SECTION,
-      'HideArchived', true);
-    chkbHideInActive.Checked := ini.ReadBool(INIFILE_SECTION,
-      'HideInActive', false);
-    chkbHideNonSwimmers.Checked := ini.ReadBool(INIFILE_SECTION,
-      'HideNonSwimmer', false);
-  finally
-    ini.Free;
-  end;
-end;
-
-procedure TMember.SCMwebsite1Click(Sender: TObject);
-var
-  base_URL: string;
-begin
-  // compiles just fine!
-  // ShellExecute(0, 0, L"http://artanemus.github.io", 0, 0, SW_SHOW);
-
-  base_URL := 'http://artanemus.github.io';
-  ShellExecute(0, 'open', PChar(base_URL), NIL, NIL, SW_SHOWNORMAL);
-
-end;
-
-procedure TMember.WritePreferences;
-var
-  ini: TIniFile;
-begin
-  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\SCM\ + SCMMEMBERPREF
-  ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_MEMBERPREF);
-  try
-    ini.WriteBool(INIFILE_SECTION, 'HideArchived', chkbHideArchived.Checked);
-    ini.WriteBool(INIFILE_SECTION, 'HideInActive', chkbHideInActive.Checked);
-    ini.WriteBool(INIFILE_SECTION, 'HideNonSwimmer',
-      chkbHideNonSwimmers.Checked);
-  finally
-    ini.Free;
-  end;
+    if Assigned(SCM.dsSwimClub.DataSet) then
+      s:= SCM.dsSwimClub.DataSet.FieldByName('Caption').AsString
+    else s:='';
+    StatusBar1.SimpleText := StatusBar1.SimpleText + sLineBreak + s;
+  end
+  else
+    StatusBar1.SimpleText := 'NOT CONNECTED. ';
 end;
 
 end.

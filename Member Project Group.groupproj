@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{EFC4DCD7-3A3C-4751-92BE-AB0F2C1A0669}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="SCM_Member.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\SCM_SwimClubMeet-R\SwimClubMeet.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\SCM_Nominate-R\SCM_Nominate.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="SCM_Member">
+        <MSBuild Projects="SCM_Member.dproj"/>
+    </Target>
+    <Target Name="SCM_Member:Clean">
+        <MSBuild Projects="SCM_Member.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SCM_Member:Make">
+        <MSBuild Projects="SCM_Member.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SwimClubMeet">
+        <MSBuild Projects="..\SCM_SwimClubMeet-R\SwimClubMeet.dproj"/>
+    </Target>
+    <Target Name="SwimClubMeet:Clean">
+        <MSBuild Projects="..\SCM_SwimClubMeet-R\SwimClubMeet.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SwimClubMeet:Make">
+        <MSBuild Projects="..\SCM_SwimClubMeet-R\SwimClubMeet.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SCM_Nominate">
+        <MSBuild Projects="..\SCM_Nominate-R\SCM_Nominate.dproj"/>
+    </Target>
+    <Target Name="SCM_Nominate:Clean">
+        <MSBuild Projects="..\SCM_Nominate-R\SCM_Nominate.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SCM_Nominate:Make">
+        <MSBuild Projects="..\SCM_Nominate-R\SCM_Nominate.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="SCM_Member;SwimClubMeet;SCM_Nominate"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="SCM_Member:Clean;SwimClubMeet:Clean;SCM_Nominate:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="SCM_Member:Make;SwimClubMeet:Make;SCM_Nominate:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
