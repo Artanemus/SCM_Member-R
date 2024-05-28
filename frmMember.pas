@@ -3,14 +3,15 @@ unit frmMember;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.DBCtrls,
   SCMSimpleConnect, SCMUtility, dmSCM,
   FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Pool,
   FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait, Data.DB, System.Actions,
   Vcl.ActnList, Vcl.WinXCtrls, Vcl.ExtCtrls, ProgramSetting, Vcl.ComCtrls,
-  exeinfo;
+  exeinfo, Vcl.Imaging.pngimage, SCMDefines;
 
 type
   TMember = class(TForm)
@@ -21,11 +22,8 @@ type
     edtPassword: TEdit;
     edtServerName: TEdit;
     edtUser: TEdit;
-    DBComboBox1: TDBComboBox;
-    Label4: TLabel;
     btnConnect: TButton;
     btnDisconnect: TButton;
-    btnManageMembers: TButton;
     ActionList1: TActionList;
     actnConnect: TAction;
     actnDisconnect: TAction;
@@ -33,25 +31,30 @@ type
     ActivityIndicator1: TActivityIndicator;
     lblAniIndicatorStatus: TLabel;
     Timer1: TTimer;
-    StatusBar1: TStatusBar;
+    Panel1: TPanel;
+    Image1: TImage;
+    StatusMsg: TLabel;
+    btnManageMembers: TButton;
     procedure actnConnectExecute(Sender: TObject);
     procedure actnConnectUpdate(Sender: TObject);
     procedure actnDisconnectExecute(Sender: TObject);
     procedure actnDisconnectUpdate(Sender: TObject);
+    procedure btnManageMembersClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
     { Private declarations }
     fDBName: String;
     fDBConnection: TFDConnection;
     fLoginTimeOut: integer;
     fConnectionCountdown: integer;
-    procedure ConnectOnTerminate(Sender: TObject); //THREAD.
+    procedure ConnectOnTerminate(Sender: TObject); // THREAD.
     procedure Status_ConnectionDescription;
     procedure LoadFromSettings; // JSON Program Settings
     procedure LoadSettings; // JSON Program Settings
     procedure SaveToSettings; // JSON Program Settings
     function GetSCMVerInfo(): string;
-
+    procedure ManageMembers(var Msg: TMessage); message SCM_INITIALISE;
 
   public
     { Public declarations }
@@ -64,54 +67,22 @@ implementation
 
 {$R *.dfm}
 
+uses frmManageMember;
+
 procedure TMember.actnConnectExecute(Sender: TObject);
 var
   sc: TSimpleConnect;
   myThread: TThread;
 begin
-  // Hide the Login and abort buttons while attempting connection
-//  lblLoginErrMsg.Visible := false;
-//  btnAbort.Visible := false;
-  btnConnect.Visible := false;
-//  lblMsg.Visible := true;
-//  lblMsg.Update();
-  Application.ProcessMessages();
-
-  if Assigned(fDBConnection) then
-  begin
-    sc := TSimpleConnect.CreateWithConnection(Self, fDBConnection);
-    // DEFAULT : SwimClubMeet
-    sc.DBName := fDBName;
-    sc.SimpleMakeTemporyConnection(edtServerName.Text, edtUser.Text,
-      edtPassword.Text, chkbUseOsAuthentication.Checked);
-//    lblMsg.Visible := false;
-
-    if (fDBConnection.Connected) then
-    begin
-      // setting modal result will Close() the form;
-      ModalResult := mrOk;
-    end
-    else
-    begin
-      // show error message - let user try again or abort
-//      lblLoginErrMsg.Visible := true;
-//      btnAbort.Visible := true;
-      btnConnect.Visible := true;
-    end;
-    sc.Free;
-  end;
-
-
   if (Assigned(SCM) and (SCM.scmConnection.Connected = false)) then
   begin
-    lblAniIndicatorStatus.Caption := 'Connecting';
-    fConnectionCountdown := fLoginTimeOut;
-    ActivityIndicator1.Visible := true; // progress timer
-    ActivityIndicator1.Enabled := true; // start spinning
-    lblAniIndicatorStatus.Visible := true; // a label with countdown
+    lblAniIndicatorStatus.Caption := 'Connecting ' +
+      IntToStr(CONNECTIONTIMEOUT);
+    StatusMsg.Caption := '';
+    ActivityIndicator1.Animate := true; // start spinning
+    lblAniIndicatorStatus.Visible := true; // a label 'Connecting'
+    fConnectionCountdown := CONNECTIONTIMEOUT - 1;
     Timer1.Enabled := true; // start the countdown
-    actnConnect.Visible := false;
-    application.ProcessMessages;
 
     myThread := TThread.CreateAnonymousThread(
       procedure
@@ -119,13 +90,11 @@ begin
         // can only be assigned if not connected
         SCM.scmConnection.Params.Values['LoginTimeOut'] :=
           IntToStr(fLoginTimeOut);
-
         sc := TSimpleConnect.CreateWithConnection(Self, SCM.scmConnection);
         sc.DBName := 'SwimClubMeet'; // DEFAULT
         sc.SaveConfigAfterConnection := false; // using JSON not System.IniFiles
         sc.SimpleMakeTemporyConnection(edtServerName.Text, edtUser.Text,
           edtPassword.Text, chkbUseOsAuthentication.Checked);
-        Timer1.Enabled := false;
         sc.Free
       end);
 
@@ -140,16 +109,17 @@ begin
   // verbose code - stop unecessary repaints ...
   if Assigned(SCM) then
   begin
-    if SCM.scmConnection.Connected and actnConnect.Visible then
-      actnConnect.Visible := false;
-    if not SCM.scmConnection.Connected and not actnConnect.Visible then
-      actnConnect.Visible := true;
+    if SCM.scmConnection.Connected and actnConnect.Enabled then
+      actnConnect.Enabled := false;
+    if not SCM.scmConnection.Connected and not actnConnect.Enabled then
+      actnConnect.Enabled := true;
   end
   else // D E F A U L T  I N I T  . Data module not created.
   begin
-    if not actnConnect.Visible then
-      actnConnect.Visible := true;
+    if not actnConnect.Enabled then
+      actnConnect.Enabled := true;
   end;
+  // btnConnect.Enabled := actnConnect.Enabled;
 end;
 
 procedure TMember.actnDisconnectExecute(Sender: TObject);
@@ -158,14 +128,15 @@ begin
   begin
     SCM.DeActivateTable;
     SCM.scmConnection.Connected := false;
-    StatusBar1.SimpleText := 'No connection.';
   end;
-  ActivityIndicator1.Visible := false;
+  ActivityIndicator1.Animate := false;
   lblAniIndicatorStatus.Visible := false;
-  ActivityIndicator1.Enabled := false;
   SaveToSettings; // As this was a OK connection - store parameters.
-  UpdateAction(actnDisconnect);
-  UpdateAction(actnConnect);
+  Status_ConnectionDescription;
+
+  // CALL IT DIRECTLY - ELSE IT WILL NOT WORK
+  actnDisconnectUpdate(Self);
+  actnConnectUpdate(Self);
 end;
 
 procedure TMember.actnDisconnectUpdate(Sender: TObject);
@@ -173,23 +144,30 @@ begin
   // verbose code - stop unecessary repaints ...
   if Assigned(SCM) then
   begin
-    if SCM.scmConnection.Connected and not actnDisconnect.Visible then
-      actnDisconnect.Visible := true;
-    if not SCM.scmConnection.Connected and actnDisconnect.Visible then
-      actnDisconnect.Visible := false;
+    if SCM.scmConnection.Connected and not actnDisconnect.Enabled then
+      actnDisconnect.Enabled := true;
+    if not SCM.scmConnection.Connected and actnDisconnect.Enabled then
+      actnDisconnect.Enabled := false;
   end
   else // D E F A U L T  I N I T  . Data module not created.
   begin
-    if actnDisconnect.Visible then
-      actnDisconnect.Visible := false;
+    if actnDisconnect.Enabled then
+      actnDisconnect.Enabled := false;
   end;
+end;
+
+procedure TMember.btnManageMembersClick(Sender: TObject);
+begin
+  if Assigned(SCM) and SCM.IsActive and SCM.scmConnection.Connected then
+  PostMessage(Handle, SCM_INITIALISE, 0, 0);
 end;
 
 procedure TMember.ConnectOnTerminate(Sender: TObject);
 begin
   lblAniIndicatorStatus.Visible := false;
-  ActivityIndicator1.Enabled := false;
-  ActivityIndicator1.Visible := false;
+  ActivityIndicator1.Animate := false;
+  Timer1.Enabled := false;
+  fConnectionCountdown := CONNECTIONTIMEOUT - 1;
 
   if TThread(Sender).FatalException <> nil then
   begin
@@ -199,32 +177,36 @@ begin
 
   if not Assigned(SCM) then
     exit;
-
   // C O N N E C T E D  .
   if (SCM.scmConnection.Connected) then
   begin
     SCM.ActivateTable;
-
-    // ALL TABLES SUCCESSFULLY MADE ACTIVE ...
     if (SCM.IsActive = true) then
-    begin
-
-    end;
+      PostMessage(Handle, SCM_INITIALISE, 0, 0);
   end;
 
   if not SCM.scmConnection.Connected then
   begin
     // Attempt to connect failed.
-    StatusBar1.SimpleText :=
+    StatusMsg.Caption :=
       'A connection couldn''t be made. (Check you input values.)';
-  end;
+  end
+  else
+    // Status : SwimClub name + APP and DB version.
+    Status_ConnectionDescription;
 
-  // Disconnect button vivibility
-  UpdateAction(actnDisconnect);
-  // Connect button vivibility
-  UpdateAction(actnConnect);
-  // Status : SwimClub name + APP and DB version.
-  Status_ConnectionDescription;
+
+  // nothing here works
+  // actnDisconnect.Update;
+  // actnConnect.Update;
+  // UpdateAction(actnDisconnect);
+  // UpdateAction(actnConnect);
+  // ActionList1.UpdateAction(actnDisconnect);
+  // ActionList1.UpdateAction(actnConnect);
+
+  // CALL IT DIRECTLY ....
+  actnDisconnectUpdate(Self);
+  actnConnectUpdate(Self);
 
 end;
 
@@ -235,11 +217,9 @@ var
 begin
   // Initialization of params.
   application.ShowHint := true;
-  ActivityIndicator1.Visible := false;
-  ActivityIndicator1.Enabled := false;
-  btnDisconnect.Visible := false;
+  ActivityIndicator1.Animate := false;
   fLoginTimeOut := CONNECTIONTIMEOUT; // DEFAULT 20 - defined in ProgramSetting
-  fConnectionCountdown := CONNECTIONTIMEOUT;
+  fConnectionCountdown := CONNECTIONTIMEOUT - 1;
   Timer1.Enabled := false;
   lblAniIndicatorStatus.Visible := false;
 
@@ -247,7 +227,7 @@ begin
   if Settings = nil then
     Settings := TPrgSetting.Create;
 
-      // C R E A T E   T H E   D A T A M O D U L E .
+  // C R E A T E   T H E   D A T A M O D U L E .
   if NOT Assigned(SCM) then
     SCM := TSCM.Create(Self);
   if SCM.scmConnection.Connected then
@@ -257,6 +237,8 @@ begin
   // JSON connection settings. Windows location :
   // %SYSTEMDRIVE\%%USER%\%USERNAME%\AppData\Roaming\Artanemus\SwimClubMeet\Member
   LoadSettings;
+
+  Status_ConnectionDescription;
 
 end;
 
@@ -298,6 +280,21 @@ begin
   LoadFromSettings();
 end;
 
+procedure TMember.ManageMembers(var Msg: TMessage);
+var
+  dlg: TManageMember;
+begin
+  // Hide the MAIN-FORM and display frmManageMember
+  Visible := false;
+  dlg := TManageMember.Create(Self);
+  dlg.Prepare(SCM.scmConnection, 1, 0);
+  dlg.ShowModal;
+  dlg.Free;
+  Visible := true;
+  ExecuteAction(actnDisconnect);
+  Close();  // terminate application ....
+end;
+
 procedure TMember.SaveToSettings;
 begin
   Settings.Server := edtServerName.Text;
@@ -313,21 +310,30 @@ end;
 
 procedure TMember.Status_ConnectionDescription;
 var
-s: string;
+  s: string;
 begin
   if Assigned(SCM) and SCM.IsActive then
   begin
     // STATUS BAR CAPTION.
-    StatusBar1.SimpleText := 'Connected to SwimClubMeet. ';
-    StatusBar1.SimpleText := StatusBar1.SimpleText + GetSCMVerInfo;
+    StatusMsg.Caption := 'Connected to SwimClubMeet. ';
+    StatusMsg.Caption := StatusMsg.Caption + GetSCMVerInfo;
 
     if Assigned(SCM.dsSwimClub.DataSet) then
-      s:= SCM.dsSwimClub.DataSet.FieldByName('Caption').AsString
-    else s:='';
-    StatusBar1.SimpleText := StatusBar1.SimpleText + sLineBreak + s;
+      s := SCM.dsSwimClub.DataSet.FieldByName('Caption').AsString
+    else
+      s := '';
+    StatusMsg.Caption := StatusMsg.Caption + sLineBreak + s;
   end
   else
-    StatusBar1.SimpleText := 'NOT CONNECTED. ';
+    StatusMsg.Caption := 'No Connection.';
+end;
+
+procedure TMember.Timer1Timer(Sender: TObject);
+begin
+  // countdown from CONNECTIONTIMEOUT
+  fConnectionCountdown := fConnectionCountdown - 1;
+  lblAniIndicatorStatus.Caption := 'Connecting ' +
+    IntToStr(fConnectionCountdown);
 end;
 
 end.

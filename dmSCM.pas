@@ -41,7 +41,9 @@ implementation
 procedure TSCM.ActivateTable;
 begin
   // activate the SCM system table .
-  FIsActive := true;
+  tblSwimClub.Open;
+  if tblSwimClub.Active then
+    FIsActive := true;
 end;
 
 procedure TSCM.DataModuleCreate(Sender: TObject);
@@ -52,6 +54,7 @@ end;
 procedure TSCM.DeActivateTable;
 begin
   // close all ....
+  tblSwimClub.Close;
   FIsActive := false;
 end;
 

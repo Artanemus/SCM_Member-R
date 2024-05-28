@@ -23,8 +23,11 @@ object SCM: TSCM
     Top = 88
   end
   object qrySCMSystem: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
     Connection = scmConnection
-    Left = 96
+    SQL.Strings = (
+      'SELECT * FROM SCMSystem WHERE SCMSystemID = 1;')
+    Left = 112
     Top = 160
   end
 end
