@@ -44,8 +44,6 @@ type
     procedure Timer1Timer(Sender: TObject);
   private
     { Private declarations }
-    fDBName: String;
-    fDBConnection: TFDConnection;
     fLoginTimeOut: integer;
     fConnectionCountdown: integer;
     procedure ConnectOnTerminate(Sender: TObject); // THREAD.
@@ -55,6 +53,7 @@ type
     procedure SaveToSettings; // JSON Program Settings
     function GetSCMVerInfo(): string;
     procedure ManageMembers(var Msg: TMessage); message SCM_INITIALISE;
+
 
   public
     { Public declarations }
@@ -210,10 +209,9 @@ begin
 
 end;
 
-procedure TMember.FormCreate(Sender: TObject);
-var
-  AValue, ASection, AName: string;
 
+
+procedure TMember.FormCreate(Sender: TObject);
 begin
   // Initialization of params.
   application.ShowHint := true;
@@ -222,6 +220,7 @@ begin
   fConnectionCountdown := CONNECTIONTIMEOUT - 1;
   Timer1.Enabled := false;
   lblAniIndicatorStatus.Visible := false;
+  StatusMsg.Caption := '';
 
   // A Class that uses JSON to read and write application configuration
   if Settings = nil then
@@ -325,7 +324,7 @@ begin
     StatusMsg.Caption := StatusMsg.Caption + sLineBreak + s;
   end
   else
-    StatusMsg.Caption := 'No Connection.';
+    StatusMsg.Caption := '';
 end;
 
 procedure TMember.Timer1Timer(Sender: TObject);

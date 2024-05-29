@@ -116,7 +116,6 @@ object Member: TMember
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 7
-    ExplicitHeight = 290
     object Image1: TImage
       Left = 0
       Top = 0
