@@ -286,6 +286,7 @@ begin
   // Hide the MAIN-FORM and display frmManageMember
   Visible := false;
   dlg := TManageMember.Create(Self);
+  // PARAMS: TFDConnection, SwimClubID, MemberID.
   dlg.Prepare(SCM.scmConnection, 1, 0);
   dlg.ShowModal;
   dlg.Free;
