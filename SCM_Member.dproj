@@ -239,6 +239,11 @@
             <Form>MemberClub</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\SCM_SwimClubMeet-R\MEMBERS\rptMemberCheckData.pas">
+            <Form>DataModule1</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
