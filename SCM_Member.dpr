@@ -31,7 +31,7 @@ uses
   XSuperObject in '..\x-superobject\XSuperObject.pas',
   SCMHelpers in '..\SCM_SHARED\SCMHelpers.pas',
   dlgMemberClub in '..\SCM_SwimClubMeet-R\MEMBERS\dlgMemberClub.pas' {MemberClub},
-  rptMemberCheckData in '..\SCM_SwimClubMeet-R\MEMBERS\rptMemberCheckData.pas' {DataModule1: TDataModule};
+  rptMemberCheckData in '..\SCM_SwimClubMeet-R\MEMBERS\rptMemberCheckData.pas' {MemberCheckData: TDataModule};
 
 {$R *.res}
 

@@ -4,7 +4,7 @@
         <ProjectVersion>20.1</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -131,8 +131,10 @@
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=Artanemus;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=SCM_Member.exe;LegalCopyright=© 2019-2022;LegalTrademarks=Artanemus;OriginalFilename=SCM_Member;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0;Comments=Manage your club&apos;s members. Part of the SwimClubMeet eco system.</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Artanemus;FileDescription=$(MSBuildProjectName);FileVersion=2.0.0.1;InternalName=SCM_Member.exe;LegalCopyright=© 2019-2024;LegalTrademarks=Artanemus;OriginalFilename=SCM_Member;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=2.0;Comments=Manage your club&apos;s members. Part of the SwimClubMeet eco system.</VerInfo_Keys>
         <Icon_MainIcon>SCM_Member.ico</Icon_MainIcon>
+        <VerInfo_MajorVer>2</VerInfo_MajorVer>
+        <VerInfo_Build>1</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
@@ -240,7 +242,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\SCM_SwimClubMeet-R\MEMBERS\rptMemberCheckData.pas">
-            <Form>DataModule1</Form>
+            <Form>MemberCheckData</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
