@@ -4,7 +4,7 @@ Manage your club members. Part of the SwimClubMeet eco system of applications to
 ![Hero Member ICON](ASSETS/SCM_Member_150x150.png)
 
 ---
-SCM_Member is a 64bit application written in pascal. It's part of an eco system of applications that make up the SwimClubMeet project. SCM lets amateur swimming clubs manage members and run their club night's. (A meet manager.)
+SCM_Member is a 32bit application written in pascal. It's part of an eco system of applications that make up the SwimClubMeet project. SCM lets amateur swimming clubs manage members and run their club night's. (A meet manager.)
 
 ![The eco system of SCM](ASSETS/SCM_GroupOfIcons.png)
 
@@ -20,24 +20,43 @@ If you are interested in following a developer's blog and track my progress then
 
 After install, by default, an icon is placed on the desktop. If you elected to disable this, type **member** in the windows search bar to discover it. Else navigate to the **Artanemus** folder on the start bar. (All SCM applications and utilities are located in this folder.)
 
+> Use Windows **Apps and Features** to remove the application.
+
 ### ON START-UP
 
 The application will ask you to login to the database. Currently there is no help file for this application. So I offer you these notes.
 
 Use the navigator to browse, edit, insert and delete members.
 
-Editing can be done in both single and grid view. (TabSheet 1 and TabSheet 2.)
+Editing can be done in both single and grid view.
 
-Members that have a swimming data (they have raced an event) cannot be deleted (it would void MS SQL integerity). The correct method is to archive these members.
-
-> Use Windows **Apps and Features** to remove the application.
+Note: Members that have a swimming data (nomination, entrant, race-times, etc) can be deleted but the correct method is to archive these members.
 
 ---
 
-![ScreenShot hamburger.](ASSETS/Screenshot%202022-10-01%20130413.JPG)
+![Login to SCM_Member](https://github.com/Artanemus/SCM_Member-R/assets/69775305/9ee9399e-f272-4f45-b56a-e6fff817c18e)
 
-The above snip-it shows tab-sheet 1. Single record view.
+All data shown here is demo-data. It uses random user names and emails.
 
-![ScreenShot member range.](ASSETS/Screenshot%202022-10-01%20130503.JPG)
+![Mmember's details](https://github.com/Artanemus/SCM_Member-R/assets/69775305/d2eb202d-5202-4a0d-afe1-d8c509a2c591)
 
-The above snip-it shows tab-sheet 2. This is grid view. Seen on the right is the quick-find dialogue.
+Multi-club assignment of members is possible. TBA.
+
+![Member's details tab-sheet 2](https://github.com/Artanemus/SCM_Member-R/assets/69775305/b2ae1123-ab79-499f-ae57-3315b8fddbb1)
+
+A role (and it's start end dates) can be assigned to a member. Currently, a report for roles hasn't been created - on my todo list. 
+
+![List view](https://github.com/Artanemus/SCM_Member-R/assets/69775305/29280d97-ffc0-4c12-8956-b3c51d6094fb)
+
+The list view. Data can be edited in this grid. Also displayed is the find dialogue.
+
+![Reports](https://github.com/Artanemus/SCM_Member-R/assets/69775305/6a2ea7d1-e9ad-4f9a-9f2f-3cc5dc6a8529)
+
+Check-Data is a new option. It'll list any missing params. 
+
+![Chart](https://github.com/Artanemus/SCM_Member-R/assets/69775305/850845c0-7d5f-4b24-b216-98a6e324367f)
+
+The default number of data points can be increased or decreased in the options dialogue. (Via the SwimClubMeet core application.) 
+
+
+
