@@ -14,6 +14,7 @@ object Member: TMember
   Position = poMainFormCenter
   Visible = True
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   TextHeight = 21
   object Label1: TLabel
     Left = 264

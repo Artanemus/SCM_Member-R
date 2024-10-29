@@ -35,6 +35,7 @@ type
     Image1: TImage;
     StatusMsg: TLabel;
     btnManageMembers: TButton;
+    procedure FormDestroy(Sender: TObject);
     procedure actnConnectExecute(Sender: TObject);
     procedure actnConnectUpdate(Sender: TObject);
     procedure actnDisconnectExecute(Sender: TObject);
@@ -67,6 +68,12 @@ implementation
 {$R *.dfm}
 
 uses frmManageMember;
+
+procedure TMember.FormDestroy(Sender: TObject);
+begin
+  // BSA added 2024.10.29.
+  FreeAndNil(Settings);
+end;
 
 procedure TMember.actnConnectExecute(Sender: TObject);
 var
@@ -232,9 +239,9 @@ begin
   if SCM.scmConnection.Connected then
     SCM.scmConnection.Connected := false;
 
-  // READ APPLICATION   C O N F I G U R A T I O N   PARAMS.
-  // JSON connection settings. Windows location :
-  // %SYSTEMDRIVE\%%USER%\%USERNAME%\AppData\Roaming\Artanemus\SwimClubMeet\Member
+  // READ APPLICATION   C O N F I G U R A T I O N   PARAMS (JSON).
+  // Windows location :
+  // %USERPROFILE%\AppData\Roaming\Artanemus\SwimClubMeet\Member
   LoadSettings;
 
   Status_ConnectionDescription;
@@ -268,6 +275,7 @@ end;
 
 procedure TMember.LoadSettings;
 begin
+  // ASSERT :
   if Settings = nil then
     Settings := TPrgSetting.Create;
   if not FileExists(Settings.GetDefaultSettingsFilename()) then
